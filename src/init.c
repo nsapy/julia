@@ -1296,10 +1296,10 @@ DLLEXPORT void julia_save()
     }
 
     if (jl_options.outputbc)
-        jl_dump_bitcode(jl_options.outputbc);
+        jl_dump_bitcode((char*)jl_options.outputbc);
 
     if (jl_options.outputo)
-        jl_dump_objfile(jl_options.outputo, 0, (const char*)s->buf, s->size);
+        jl_dump_objfile((char*)jl_options.outputo, 0, (const char*)s->buf, s->size);
 }
 
 jl_function_t *jl_typeinf_func=NULL;

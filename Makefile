@@ -182,10 +182,15 @@ $(build_private_libdir)/inference.o: $(build_private_libdir)/inference0.$(SHLIB_
 	$(call spawn,$(JULIA_EXECUTABLE)) -C $(JULIA_CPU_TARGET) --output-o $(call cygpath_w,$(build_private_libdir)/inference.o) -f \
 		-J $(call cygpath_w,$(build_private_libdir)/inference0.$(SHLIB_EXT)) coreimg.jl)
 
+# on windows, also generate a .ji file so we can delete the .dll
+ifeq ($(OS),WINNT)
+JULIA_SYSIMG_BUILD_FLAGS += --output-ji $(call cygpath_w,$(build_private_libdir)/sys.ji)
+endif
+
 COMMA:=,
 $(build_private_libdir)/sys.o: VERSION $(BASE_SRCS) $(build_docdir)/helpdb.jl $(build_private_libdir)/inference.$(SHLIB_EXT)
 	@$(call PRINT_JULIA, cd base && \
-	$(call spawn,$(JULIA_EXECUTABLE)) -C $(JULIA_CPU_TARGET) --output-o $(call cygpath_w,$(build_private_libdir)/sys.o) -f \
+	$(call spawn,$(JULIA_EXECUTABLE)) -C $(JULIA_CPU_TARGET) --output-o $(call cygpath_w,$(build_private_libdir)/sys.o) $(JULIA_SYSIMG_BUILD_FLAGS) -f \
 		-J $(call cygpath_w,$(build_private_libdir)/inference.$(SHLIB_EXT)) sysimg.jl \
 		|| { echo '*** This error is usually fixed by running `make clean`. If the error persists$(COMMA) try `make cleanall`. ***' && false; } )
 

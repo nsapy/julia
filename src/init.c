@@ -963,7 +963,7 @@ static void jl_resolve_sysimg_location(JL_IMAGE_SEARCH rel)
             // build time path, relative to JULIA_HOME
             free_path = (char*)malloc(PATH_MAX);
             int n = snprintf(free_path, PATH_MAX, "%s" PATHSEPSTRING "%s",
-                     jl_options.julia_home, jl_options.image_file);
+                             jl_options.julia_home, jl_options.image_file);
             if (n >= PATH_MAX || n < 0) {
                 jl_error("fatal error: jl_compileropts.image_file path too long\n");
             }
